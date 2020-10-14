@@ -1,23 +1,18 @@
 package main
 
 import (
-	//"fmt"
 	"io/ioutil"
 	"net/http"
 	"log"
 	"html/template"
 	"regexp"
-	//"errors"
 )
 
-//Page data structure
 type Page struct{
 	Title string
-	//byte slice
 	Body []byte
 }
 
-//save method
 func (p *Page) save() error{
 	filename := p.Title + ".html"
 	return ioutil.WriteFile(filename, p.Body, 0600)
@@ -36,7 +31,6 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 
 func loadPage(title string) (*Page, error){
 	filename := title + ".html"
-	//underscore used to throw away return value
 	body, err := ioutil.ReadFile(filename)
 	if err != nil{
 		return nil, err
