@@ -6,6 +6,7 @@ import (
 	"log"
 	"html/template"
     "fmt"
+    "os"
 )
 
 //In-Memory Storage
@@ -83,8 +84,13 @@ func saveHandler(w http.ResponseWriter, r *http.Request) {
     http.Redirect(w, r, "/view/"+title, http.StatusFound)
 }
 
-//var templates = template.Must(template.ParseFiles("edit.html", "view.html"))
-//var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
+func infoHandler(w http.ResponseWriter, r *http.Request) {
+    //func (*File) Readdir
+    //func (*File) Readdirnames
+
+    //permissions - type FileMode
+    fi, err := os.Lstat("")
+}
 
 func main(){
     http.HandleFunc("/", homeHandler)
@@ -92,6 +98,7 @@ func main(){
 	http.HandleFunc("/view/", viewHandler)
 	http.HandleFunc("/edit/", editHandler)
     http.HandleFunc("/save/", saveHandler)
+    http.HandleFunc("/info/", infoHandler)
     fmt.Println("Launching webserver on localhost:8080")
     log.Fatal(http.ListenAndServe(":8080",nil))
     
