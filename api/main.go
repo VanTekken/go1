@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"log"
 	"html/template"
-    "fmt"
     /*"os"*/
 )
 
@@ -21,7 +20,7 @@ func (p *Page) save() error{
 	return ioutil.WriteFile(filename, p.Body, 0600)
 }
 func loadPage(title string) (*Page, error){
-    filename := "../templates/" + title + ".html"
+    filename := "templates/" + title + ".html"
 	body, err := ioutil.ReadFile(filename)
 	if err != nil{
 		return nil, err
@@ -30,7 +29,7 @@ func loadPage(title string) (*Page, error){
 }
 //Render html template file
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
-    t, err := template.ParseFiles("../templates/" + tmpl + ".html")
+    t, err := template.ParseFiles("templates/" + tmpl + ".html")
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -99,7 +98,5 @@ func main(){
 	http.HandleFunc("/edit/", editHandler)
     http.HandleFunc("/save/", saveHandler)
     //http.HandleFunc("/info/", infoHandler)
-    fmt.Println("Launching webserver on localhost:8080")
-    log.Fatal(http.ListenAndServe(":8080",nil))
-    
+    log.Fatal(http.ListenAndServe(":8081",nil))
 }
