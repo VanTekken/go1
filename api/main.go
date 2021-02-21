@@ -4,9 +4,31 @@ import (
 	"io/ioutil"
 	"net/http"
 	"log"
-	"html/template"
-    /*"os"*/
+    "html/template"
+    "fmt"
+    "runtime"
+    "os/exec"
 )
+
+
+func openbrowser(url string) {
+	var err error
+
+	switch runtime.GOOS {
+    case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	default:
+		err = fmt.Errorf("unsupported platform")
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
 
 //In-Memory Storage
 type Page struct{
@@ -97,6 +119,7 @@ func main(){
 	http.HandleFunc("/view/", viewHandler)
 	http.HandleFunc("/edit/", editHandler)
     http.HandleFunc("/save/", saveHandler)
-    //http.HandleFunc("/info/", infoHandler)
+    openbrowser("http://localhost:8081")
     log.Fatal(http.ListenAndServe(":8081",nil))
+    
 }
